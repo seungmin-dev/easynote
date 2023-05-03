@@ -2,16 +2,46 @@ import { NextPage } from "next";
 import Layout from "../../components/layout";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import moment from "moment";
+import "moment/locale/ko";
+import { useEffect, useRef } from "react";
+
+interface SaveForm {
+  id: Number;
+  noteTitle: string;
+  content: string;
+}
 
 const TodoCreate: NextPage = () => {
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<SaveForm>();
+  const noteTitle = useRef<HTMLInputElement>(null);
+  const content = useRef<HTMLTextAreaElement>(null);
 
   const onClickBack = () => {
-    // input이 비어있지 않으면 alert
-    // alert("작성하던 노트를 삭제하고 뒤로 가시겠습니까?");
+    if (noteTitle.current?.value !== "" || content.current?.value !== "") {
+      if (confirm("작성하던 노트를 삭제하고 뒤로 가시겠습니까?")) router.back();
+      else return;
+    }
   };
-  const onSubmit = () => {};
+
+  const onSubmit = ({ noteTitle, content }: SaveForm) => {
+    console.log("click save");
+    let easynote = [];
+    if (localStorage.getItem("easynote"))
+      easynote = JSON.parse(localStorage.getItem("easynote")!);
+    else easynote = [];
+
+    let data = {
+      id: easynote.length + 1 + "",
+      noteTitle,
+      content,
+      createdAt: moment(),
+    };
+
+    easynote.push(data);
+    localStorage.setItem("easynote", JSON.stringify(easynote));
+  };
 
   return (
     <Layout title="새 이지노트">
@@ -29,23 +59,25 @@ const TodoCreate: NextPage = () => {
             </button>
             <input
               type="submit"
-              // onClick={onClickSave}
-              className="w-16 h-10 bg-blue-600 text-white rounded-xl"
+              className="w-16 h-10 bg-blue-600 text-white rounded-xl cursor-pointer"
               value="저장"
             />
           </div>
         </div>
         <input
           {...register("noteTitle", { required: true })}
+          name="noteTitle"
           type="text"
           className="w-full mb-3 p-3 rounded-lg bg-gray-100 placeholder-gray-500"
           placeholder="제목을 입력하세요"
+          ref={noteTitle}
         />
         <textarea
-          {...register("note", { required: true })}
-          name="note"
+          {...register("content", { required: true })}
+          name="content"
           className="w-full p-3 rounded-lg bg-gray-100 placeholder-gray-500"
           placeholder="이지노트를 작성하세요"
+          ref={content}
         />
       </form>
     </Layout>
