@@ -1,5 +1,7 @@
 import Image from "next/image";
 import bgImage from "../components/background.jpg";
+import { cls } from "../libs/util";
+import Link from "next/link";
 interface LayoutProps {
   title: string;
   children: React.ReactNode;
@@ -8,7 +10,7 @@ interface LayoutProps {
 export default function Layout({ title, children }: LayoutProps) {
   return (
     <div className="w-full h-screen justify-center pt-20">
-      <div className="bg-white w-xl max-w-xl h-40 m-auto rounded-2xl shadow-xl">
+      <div className="w-xl max-w-xl m-auto rounded-2xl shadow-xl">
         <div className="bg-gray-200 w-full h-14 rounded-t-2xl flex items-center">
           {/* 색깔버튼블럭 */}
           <div className="w-24 flex items-center justify-between p-2 pl-6">
@@ -18,22 +20,49 @@ export default function Layout({ title, children }: LayoutProps) {
           </div>
           {/* 페이지탭 */}
           <div className="w-72 h-full ml-3 flex flex-grow ">
-            <div className="w-32 h-10 mt-4 bg-white rounded-t-lg p-2 text-center">
-              이지노트
-            </div>
-            <div className="w-32 h-10 mt-4 bg-gray-100 rounded-t-lg p-2 text-center">
-              날짜노트
-            </div>
-            <div className="w-32 h-10 mt-4 bg-gray-100 rounded-t-lg p-2 text-center">
-              추천
-            </div>
+            <Link href="/">
+              <div
+                className={cls(
+                  "w-32 h-10 mt-4 bg-white rounded-t-lg p-2 text-center",
+                  title === "이지노트" ? "bg-white" : "bg-gray-100"
+                )}
+              >
+                이지노트
+              </div>
+            </Link>
+            <Link href="/schedule">
+              <div
+                className={cls(
+                  "w-32 h-10 mt-4 bg-white rounded-t-lg p-2 text-center",
+                  title === "날짜노트" ? "bg-white" : "bg-gray-100"
+                )}
+              >
+                날짜노트
+              </div>
+            </Link>
+            <Link href="/recommend">
+              <div
+                className={cls(
+                  "w-32 h-10 mt-4 bg-white rounded-t-lg p-2 text-center",
+                  title === "추천" ? "bg-white" : "bg-gray-100"
+                )}
+              >
+                추천
+              </div>
+            </Link>
           </div>
           {/* 추가버튼 */}
-          <div className="mr-5">
-            <button className="font-light text-3xl text-slate-600">+</button>
-          </div>
+          {title === "이지노트" || title === "날짜노트" ? (
+            <div className="mr-5">
+              <button className="font-light text-3xl text-slate-600">+</button>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
-        <div className="rounded-b-full">{children}</div>
+        <div className="bg-white p-6 w-fll min-h-lg rounded-b-2xl">
+          {children}
+        </div>
       </div>
       <Image
         src={bgImage}
