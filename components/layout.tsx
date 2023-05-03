@@ -2,12 +2,20 @@ import Image from "next/image";
 import bgImage from "../components/background.jpg";
 import { cls } from "../libs/util";
 import Link from "next/link";
+import { useRouter } from "next/router";
+
 interface LayoutProps {
   title: string;
   children: React.ReactNode;
 }
 
 export default function Layout({ title, children }: LayoutProps) {
+  console.log(title);
+  const router = useRouter();
+  const newNote = () => {
+    if (title === "이지노트") router.push("/todo/create");
+    else if (title === "날짜노트") router.push("schedule/create");
+  };
   return (
     <div className="w-full h-screen justify-center pt-20">
       <div className="w-xl max-w-xl m-auto rounded-2xl shadow-xl">
@@ -23,8 +31,8 @@ export default function Layout({ title, children }: LayoutProps) {
             <Link href="/">
               <div
                 className={cls(
-                  "w-32 h-10 mt-4 bg-white rounded-t-lg p-2 text-center",
-                  title === "이지노트" ? "bg-white" : "bg-gray-100"
+                  "w-32 h-10 mt-4 rounded-t-lg p-2 text-center",
+                  title.includes("이지노트") ? "bg-white" : "bg-gray-100"
                 )}
               >
                 이지노트
@@ -33,8 +41,8 @@ export default function Layout({ title, children }: LayoutProps) {
             <Link href="/schedule">
               <div
                 className={cls(
-                  "w-32 h-10 mt-4 bg-white rounded-t-lg p-2 text-center",
-                  title === "날짜노트" ? "bg-white" : "bg-gray-100"
+                  "w-32 h-10 mt-4 rounded-t-lg p-2 text-center",
+                  title.includes("날짜노트") ? "bg-white" : "bg-gray-100"
                 )}
               >
                 날짜노트
@@ -43,7 +51,7 @@ export default function Layout({ title, children }: LayoutProps) {
             <Link href="/recommend">
               <div
                 className={cls(
-                  "w-32 h-10 mt-4 bg-white rounded-t-lg p-2 text-center",
+                  "w-32 h-10 mt-4 rounded-t-lg p-2 text-center",
                   title === "추천" ? "bg-white" : "bg-gray-100"
                 )}
               >
@@ -52,9 +60,14 @@ export default function Layout({ title, children }: LayoutProps) {
             </Link>
           </div>
           {/* 추가버튼 */}
-          {title === "이지노트" || title === "날짜노트" ? (
+          {title.includes("노트") && !title.includes("새") ? (
             <div className="mr-5">
-              <button className="font-light text-3xl text-slate-600">+</button>
+              <button
+                onClick={newNote}
+                className="font-light text-3xl text-slate-600"
+              >
+                +
+              </button>
             </div>
           ) : (
             ""
