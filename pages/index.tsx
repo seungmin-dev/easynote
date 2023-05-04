@@ -1,8 +1,25 @@
 import type { NextPage } from "next";
 import Layout from "../components/layout";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import moment from "moment";
+import "moment/locale/ko";
+
+interface Easynote {
+  id: number;
+  noteTitle: string;
+  content: string;
+  createdAt: {};
+}
 
 const Home: NextPage = () => {
+  const [easynotes, setEasynotes] = useState([]);
+
+  useEffect(() => {
+    if (localStorage.getItem("easynote"))
+      setEasynotes(JSON.parse(localStorage.getItem("easynote")!));
+  }, []);
+
   return (
     <Layout title="이지노트">
       <div className="mb-6 flex justify-between">
@@ -19,16 +36,16 @@ const Home: NextPage = () => {
         </select>
       </div>
       <div>
-        {[1, 2, 3, 4, 5].map((i) => (
-          <Link key={i} href={`/todo/${i}`}>
+        {easynotes.map((note: any) => (
+          <Link key={note?.id} href={`/todo/${note?.id}`}>
             <div className="w-full p-5 bg-gray-100 rounded-xl my-3">
               <div className="flex justify-between mb-1">
-                <h2 className="font-large text-xl">이지노트</h2>
-                <span className="text-gray-600 text-xs">몇 초 전</span>
+                <h2 className="font-large text-xl">{note?.noteTitle}</h2>
+                <span className="text-gray-600 text-xs">
+                  {moment(note?.createdAt).fromNow()}
+                </span>
               </div>
-              <span className="text-gray-400 text-sm">
-                어쩌구저쩌구이러쿵저러쿵
-              </span>
+              <span className="text-gray-400 text-sm">{note?.content}</span>
             </div>
           </Link>
         ))}

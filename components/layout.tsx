@@ -10,7 +10,6 @@ interface LayoutProps {
 }
 
 export default function Layout({ title, children }: LayoutProps) {
-  console.log(title);
   const router = useRouter();
   const newNote = () => {
     if (title === "이지노트") router.push("/todo/create");

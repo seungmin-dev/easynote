@@ -2,15 +2,34 @@ import { NextPage } from "next";
 import Layout from "../../components/layout";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
 
+interface Note {
+  id: number;
+  noteTitle: string;
+  content: string;
+  createdAt: string;
+}
 const TodoNote: NextPage = () => {
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
+  const { id } = router.query;
 
-  const onClickBack = () => {
-    // input이 비어있지 않으면 alert
-    // alert("작성하던 노트를 삭제하고 뒤로 가시겠습니까?");
-  };
+  useEffect(() => {
+    if (localStorage.getItem("easynote")) {
+      let easynote = JSON.parse(localStorage.getItem("easynote")!).filter(
+        function (note: { id: string }) {
+          return note.id === id;
+        }
+      );
+      if (easynote[0]) {
+        setValue("noteTitle", easynote[0].noteTitle);
+        setValue("content", easynote[0].content);
+      }
+    }
+  }, [router]);
+
+  const onClickBack = () => {};
   const onSubmit = () => {};
 
   return (
@@ -34,14 +53,19 @@ const TodoNote: NextPage = () => {
           </div>
         </div>
         <input
-          {...register("noteTitle", { required: true })}
+          // onChange={(e) => titleChange()}
+          {...register("noteTitle", {
+            required: true,
+          })}
           type="text"
           className="w-full mb-3 p-3 rounded-lg bg-gray-100 placeholder-gray-500"
           placeholder="제목을 입력하세요"
         />
         <textarea
-          {...register("note", { required: true })}
-          name="note"
+          {...register("content", {
+            required: true,
+          })}
+          name="content"
           className="w-full p-3 rounded-lg bg-gray-100 placeholder-gray-500"
           placeholder="이지노트를 작성하세요"
         />
@@ -51,3 +75,6 @@ const TodoNote: NextPage = () => {
 };
 
 export default TodoNote;
+function note(value: never, index: number, array: never[]): value is never {
+  throw new Error("Function not implemented.");
+}

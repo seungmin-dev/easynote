@@ -26,7 +26,6 @@ const TodoCreate: NextPage = () => {
   };
 
   const onSubmit = ({ noteTitle, content }: SaveForm) => {
-    console.log("click save");
     let easynote = [];
     if (localStorage.getItem("easynote"))
       easynote = JSON.parse(localStorage.getItem("easynote")!);
