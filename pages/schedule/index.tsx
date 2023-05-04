@@ -23,7 +23,7 @@ const Schedule: NextPage = () => {
     e.preventDefault();
     if (
       localStorage.getItem("schenote") &&
-      localStorage.getItem("schenote")!.length > 0
+      JSON.parse(localStorage.getItem("schenote")!).length > 0
     ) {
       if (confirm("정말로 노트를 전부 삭제하시겠어요?🥹")) {
         let temp = JSON.parse(localStorage.getItem("schenote")!);
