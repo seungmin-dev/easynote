@@ -17,7 +17,7 @@ interface SaveForm {
   content: string;
 }
 
-const TodoNote: NextPage = () => {
+const EasyNote: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit, setValue } = useForm<SaveForm>();
   const { id } = router.query;
@@ -150,4 +150,4 @@ const TodoNote: NextPage = () => {
   );
 };
 
-export default TodoNote;
+export default EasyNote;

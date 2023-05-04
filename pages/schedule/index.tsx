@@ -9,10 +9,27 @@ import { useRouter } from "next/router";
 
 const Schedule: NextPage = () => {
   const router = useRouter();
+  const [method, setMethod] = useState("date");
   const [schenotes, setSchenotes] = useState([]);
   const [search, setSearch] = useState(false);
   const [deleteAll, setDeleteAll] = useState(false);
   const searchText = useRef<HTMLInputElement | null>(null);
+  const searchFromDate = useRef<HTMLInputElement | null>(null);
+  const searchToDate = useRef<HTMLInputElement | null>(null);
+  const searchDday = useRef<HTMLInputElement | null>(null);
+
+  const onClickDate = () => {
+    setMethod("date");
+  };
+
+  const onClickDday = () => {
+    setMethod("dday");
+  };
+
+  const onClickInit = () => {
+    searchFromDate.current!.value = "";
+    searchToDate.current!.value = "";
+  };
 
   const onClickSearch = (e: any) => {
     e.preventDefault();
@@ -35,37 +52,147 @@ const Schedule: NextPage = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("schenote") || deleteAll)
+    if (localStorage.getItem("schenote") || deleteAll) {
       setSchenotes(
         JSON.parse(localStorage.getItem("schenote")!)
           .reverse()
-          .filter(function (note: { noteTitle: string }) {
-            if (searchText.current?.value === "") return true;
-            else return note.noteTitle.includes(searchText.current?.value);
+          .filter(function (note: {
+            noteTitle: string;
+            date: string;
+            createdAt: string;
+          }) {
+            // if (searchToDate.current?.value === "")
+            //   searchToDate.current!.value = moment().format("YYYY-MM-DD");
+            if (searchText.current?.value === "") {
+              //초기 무조건 검색 || 날짜 초기화 검색어 없이
+              if (
+                method === "date" &&
+                searchFromDate.current?.value === "" &&
+                searchToDate.current?.value === ""
+              ) {
+                return true;
+              }
+              // 날짜만
+              if (method === "date" && searchFromDate) {
+                return moment(note.date).isBetween(
+                  moment(searchFromDate.current?.value),
+                  moment(searchToDate.current?.value),
+                  null,
+                  "[]"
+                );
+              }
+              //디데이만
+              if (method === "dday" && searchDday) {
+                return (
+                  moment(note.date).isAfter(moment()) &&
+                  Math.abs(moment().diff(moment(note.date), "days")) <=
+                    Number(searchDday.current?.value)
+                );
+              }
+              return true;
+            } else if (searchText.current?.value !== "") {
+              //날짜+검색어
+              if (method === "date") {
+                return (
+                  note.noteTitle.includes(searchText.current!.value) &&
+                  moment(note.date).isBetween(
+                    searchFromDate.current?.value,
+                    searchToDate.current?.value,
+                    null,
+                    "[]"
+                  )
+                );
+              }
+              //디데이+검색어
+              if (method === "dday") {
+                return (
+                  note.noteTitle.includes(searchText.current!.value) &&
+                  moment(note.date).isAfter(moment()) &&
+                  Math.abs(moment().diff(moment(note.date), "days")) <=
+                    Number(searchDday.current?.value)
+                );
+              }
+              return note.noteTitle.includes(searchText.current!.value);
+            }
           })
       );
+    }
     setSearch(false);
     setDeleteAll(false);
   }, [deleteAll, search]);
 
   return (
     <Layout title="날짜노트">
+      <div className="flex content-between mb-2">
+        <div className="flex justify-content">
+          <input
+            type="button"
+            onClick={onClickDate}
+            className={cls(
+              "w-24 p-2 rounded-lg rounded-r-none text-center cursor-pointer",
+              method === "date" ? "bg-gray-100" : "bg-gray-200"
+            )}
+            value="날짜 우선"
+          />
+          <input
+            type="button"
+            onClick={onClickDday}
+            className={cls(
+              "w-28 rounded-lg rounded-l-none p-2 px-4 text-center mr-2 cursor-pointer",
+              method === "dday" ? "bg-gray-100" : "bg-gray-200"
+            )}
+            value="디데이 우선"
+          />
+        </div>
+        {method === "date" ? (
+          <>
+            <input
+              type="date"
+              ref={searchFromDate}
+              // defaultValue={moment().format("YYYY-MM-DD")}
+              className="text-base leading-7  bg-gray-100 rounded-lg text-center p-1 pr-2"
+            />{" "}
+            <span className="leading-9 px-1 text-center">-</span>
+            <input
+              type="date"
+              ref={searchToDate}
+              // defaultValue={moment().format("YYYY-MM-DD")}
+              className="text-base leading-7 mr-2 bg-gray-100 rounded-lg text-center p-1 pr-2"
+            />
+            <input
+              type="button"
+              onClick={onClickInit}
+              className="w-28 rounded-lg bg-gray-100 text-center"
+              value="날짜 초기화"
+            />
+          </>
+        ) : (
+          ""
+        )}
+        {method === "dday" ? (
+          <>
+            <h4 className="text-lg mr-1 ml-2 leading-9">D - </h4>
+            <input
+              type="text"
+              ref={searchDday}
+              className="w-20 rounded-lg bg-gray-100 p-2 pl-4 focus-visible:border-black"
+            />
+          </>
+        ) : (
+          ""
+        )}
+      </div>
       <div className="mb-6 flex justify-between">
         <input
           type="text"
-          className="w-80 rounded-lg bg-gray-100 p-2 pl-4 focus-visible:border-black"
+          className="flex-grow mr-2 rounded-lg bg-gray-100 p-2 pl-4 focus-visible:border-black"
           placeholder="제목으로 검색"
           ref={searchText}
         />
         <div>
           <button
             onClick={(e) => onClickSearch(e)}
-            className={cls(
-              "w-24 py-2 mr-2  text-white rounded-lg",
-              schenotes.length > 0
-                ? "bg-blue-600"
-                : "bg-blue-300 cursor-not-allowed"
-            )}
+            className={cls("w-24 py-2 mr-2  text-white rounded-lg bg-blue-600")}
           >
             검색
           </button>
@@ -87,7 +214,14 @@ const Schedule: NextPage = () => {
           <Link key={note?.id} href={`/schedule/${note?.id}`}>
             <div className="w-full p-5 bg-gray-100 rounded-xl my-3 flex">
               <div className="w-20 mr-2">
-                <h2 className="font-bold text-2xl text-center border-r-[1px] border-gray-300 mr-2 p-2 pl-0">
+                <h2
+                  className={cls(
+                    "font-bold text-2xl text-center border-r-[1px] border-gray-300 mr-2 p-2 pl-0 ",
+                    moment().diff(moment(note?.date), "days") === 0
+                      ? "leading-1"
+                      : "leading-[4rem]"
+                  )}
+                >
                   D{""}
                   {moment().diff(moment(note?.date), "days") == 0
                     ? `-day`

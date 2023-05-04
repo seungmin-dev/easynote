@@ -12,12 +12,13 @@ interface LayoutProps {
 export default function Layout({ title, children }: LayoutProps) {
   const router = useRouter();
   const newNote = () => {
-    if (title === "이지노트") router.push("/todo/create");
+    if (title === "이지노트") router.push("/easy/create");
     else if (title === "날짜노트") router.push("/schedule/create");
   };
   return (
-    <div className="w-full h-screen justify-center pt-20">
-      <div className="w-xl max-w-xl m-auto rounded-2xl shadow-xl">
+    <div className="w-full h-screen justify-center pt-32">
+      <div className="w-2xl min-w-2xl max-w-2xl max-h-[40rem] m-auto rounded-2xl shadow-xl overflow-y-hidden">
+        {/* 상단탭 */}
         <div className="bg-gray-200 w-full h-14 rounded-t-2xl flex items-center">
           {/* 색깔버튼블럭 */}
           <div className="w-24 flex items-center justify-between p-2 pl-6">
@@ -72,9 +73,8 @@ export default function Layout({ title, children }: LayoutProps) {
             ""
           )}
         </div>
-        <div className="bg-white p-6 w-fll min-h-lg rounded-b-2xl">
-          {children}
-        </div>
+        {/* 하단 하얀부분 */}
+        <div className="bg-white p-6 w-full rounded-b-2xl">{children}</div>
       </div>
       <Image
         src={bgImage}

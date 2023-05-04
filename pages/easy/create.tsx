@@ -12,7 +12,7 @@ interface SaveForm {
   content: string;
 }
 
-const TodoCreate: NextPage = () => {
+const EasyCreate: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit } = useForm<SaveForm>();
   const noteTitle = useRef<HTMLInputElement | null>(null);
@@ -51,7 +51,7 @@ const TodoCreate: NextPage = () => {
   return (
     <Layout title="새 이지노트">
       <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
-        <div className="w-full h-12 flex align-middle justify-between mb-4">
+        <div className="w-full h-10 flex align-middle justify-between mb-4">
           <h1 className="w-32 text-2xl font-bold mb-3 item pt-2">
             새 이지노트
           </h1>
@@ -95,4 +95,4 @@ const TodoCreate: NextPage = () => {
   );
 };
 
-export default TodoCreate;
+export default EasyCreate;

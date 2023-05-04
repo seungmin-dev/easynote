@@ -7,6 +7,12 @@ import "moment/locale/ko";
 import { useRouter } from "next/router";
 import { cls } from "../libs/util";
 
+interface EasyNoteData {
+  id: number;
+  noteTitle: string;
+  content: string;
+  createdAt: string;
+}
 const Home: NextPage = () => {
   const router = useRouter();
   const [easynotes, setEasynotes] = useState([]);
@@ -53,7 +59,7 @@ const Home: NextPage = () => {
       <div className="mb-6 flex justify-between">
         <input
           type="text"
-          className="w-80 rounded-lg bg-gray-100 p-2 pl-4 focus-visible:border-black"
+          className="flex-grow mr-2 rounded-lg bg-gray-100 p-2 pl-4 focus-visible:border-black"
           placeholder="제목으로 검색"
           ref={searchText}
         />
@@ -83,18 +89,16 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div>
-        {easynotes.map((note: any) => (
-          <Link key={note?.id} href={`/todo/${note?.id}`}>
-            <div className="w-full p-5 bg-gray-100 rounded-xl my-3">
-              <div className="flex justify-between mb-1">
-                <h2 className="font-large text-xl">{note?.noteTitle}</h2>
-                <span className="text-gray-600 text-xs">
-                  {moment(note?.createdAt).fromNow()}
-                </span>
-              </div>
-              <span className="text-gray-400 text-sm">{note?.content}</span>
+        {easynotes.map((note: EasyNoteData) => (
+          <div key={note.id} className="w-full p-5 bg-gray-100 rounded-xl my-3">
+            <div className="flex justify-between mb-1">
+              <h2 className="font-large text-xl">{note?.noteTitle}</h2>
+              <span className="text-gray-600 text-xs">
+                {moment(note?.createdAt).fromNow()}
+              </span>
             </div>
-          </Link>
+            <span className="text-gray-400 text-sm">{note?.content}</span>
+          </div>
         ))}
       </div>
     </Layout>

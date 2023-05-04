@@ -13,7 +13,7 @@ interface SaveForm {
   content: string;
 }
 
-const TodoCreate: NextPage = () => {
+const ScheCreate: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit } = useForm<SaveForm>();
   const noteTitle = useRef<HTMLInputElement | null>(null);
@@ -28,7 +28,6 @@ const TodoCreate: NextPage = () => {
   };
 
   const onSubmit = ({ date, noteTitle, content }: SaveForm) => {
-    console.log(date);
     let schenote = [];
     if (localStorage.getItem("schenote"))
       schenote = JSON.parse(localStorage.getItem("schenote")!);
@@ -54,14 +53,15 @@ const TodoCreate: NextPage = () => {
   return (
     <Layout title="새 날짜노트">
       <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
-        <div className="w-full h-12 flex align-middle justify-between mb-4">
-          <h1 className="w-32 text-2xl font-bold mb-3 item pt-2">
+        <div className="w-full h-10 flex align-middle justify-between mb-4">
+          <h1 className="flex-grow text-2xl font-bold mb-3 item pt-2">
             새 날짜노트
           </h1>
           <input
             {...register("date", { required: true })}
             type="date"
             defaultValue={moment().format("YYYY-MM-DD")}
+            className="text-base bg-gray-100 rounded-lg text-center px-2 mr-2"
           />
           <div>
             <button
@@ -103,4 +103,4 @@ const TodoCreate: NextPage = () => {
   );
 };
 
-export default TodoCreate;
+export default ScheCreate;
