@@ -13,7 +13,7 @@ export default function Layout({ title, children }: LayoutProps) {
   const router = useRouter();
   const newNote = () => {
     if (title === "이지노트") router.push("/todo/create");
-    else if (title === "날짜노트") router.push("schedule/create");
+    else if (title === "날짜노트") router.push("/schedule/create");
   };
   return (
     <div className="w-full h-screen justify-center pt-20">

@@ -13,11 +13,12 @@ interface Note {
 }
 interface SaveForm {
   id: Number;
+  date: string;
   noteTitle: string;
   content: string;
 }
 
-const TodoNote: NextPage = () => {
+const ScheNote: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit, setValue } = useForm<SaveForm>();
   const { id } = router.query;
@@ -28,15 +29,16 @@ const TodoNote: NextPage = () => {
 
   // 초기값
   useEffect(() => {
-    if (localStorage.getItem("easynote")) {
-      let easynote = JSON.parse(localStorage.getItem("easynote")!).filter(
+    if (localStorage.getItem("schenote")) {
+      let schenote = JSON.parse(localStorage.getItem("schenote")!).filter(
         function (note: { id: string }) {
           return note.id === id;
         }
       );
-      if (easynote[0]) {
-        setValue("noteTitle", easynote[0].noteTitle);
-        setValue("content", easynote[0].content);
+      if (schenote[0]) {
+        setValue("date", schenote[0].date);
+        setValue("noteTitle", schenote[0].noteTitle);
+        setValue("content", schenote[0].content);
       }
     }
   }, [router]);
@@ -49,54 +51,58 @@ const TodoNote: NextPage = () => {
     }
   };
 
-  const onSubmit = ({ noteTitle, content }: SaveForm) => {
-    let easynote = [];
-    if (localStorage.getItem("easynote"))
-      easynote = JSON.parse(localStorage.getItem("easynote")!);
-    else easynote = [];
+  const onSubmit = ({ date, noteTitle, content }: SaveForm) => {
+    let schenote = [];
+    if (localStorage.getItem("schenote"))
+      schenote = JSON.parse(localStorage.getItem("schenote")!);
+    else schenote = [];
 
     let data = {
       id: router.query.id + "",
+      date,
       noteTitle,
       content,
       createdAt: moment(),
     };
 
-    let index = JSON.parse(localStorage.getItem("easynote")!).findIndex(
+    let index = JSON.parse(localStorage.getItem("schenote")!).findIndex(
       (item: { id: string }) => item.id === id
     );
-    easynote.splice(index, 1);
-    easynote.push(data);
-    localStorage.setItem("easynote", JSON.stringify(easynote));
+    schenote.splice(index, 1);
+    schenote.push(data);
+    localStorage.setItem("schenote", JSON.stringify(schenote));
 
     alert("저장 성공!💖");
-    router.push("/");
+    router.push("/schedule");
   };
 
   const onCilckDelete = (e: any) => {
     e.preventDefault();
 
     if (confirm("노트를 삭제하시겠어요?🥹")) {
-      let easynote = [];
-      if (localStorage.getItem("easynote"))
-        easynote = JSON.parse(localStorage.getItem("easynote")!);
-      else easynote = [];
+      let schenote = [];
+      if (localStorage.getItem("schenote"))
+        schenote = JSON.parse(localStorage.getItem("schenote")!);
+      else schenote = [];
 
-      let index = JSON.parse(localStorage.getItem("easynote")!).findIndex(
+      let index = JSON.parse(localStorage.getItem("schenote")!).findIndex(
         (item: { id: string }) => item.id === id
       );
-      easynote.splice(index, 1);
-      localStorage.setItem("easynote", JSON.stringify(easynote));
+      schenote.splice(index, 1);
+      localStorage.setItem("schenote", JSON.stringify(schenote));
 
-      router.push("/");
+      router.push("/schedule");
     } else return false;
   };
 
   return (
-    <Layout title="이지노트">
+    <Layout title="날짜노트">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full h-12 flex align-middle justify-between mb-4">
-          <h1 className="w-32 text-2xl font-bold mb-3 item pt-2">이지노트</h1>
+          <h1 className="w-32 text-2xl font-bold mb-3 item pt-2">
+            새 날짜노트
+          </h1>
+          <input {...register("date", { required: true })} type="date" />
           <div>
             <button
               onClick={(e) => onClickBack(e)}
@@ -150,7 +156,4 @@ const TodoNote: NextPage = () => {
   );
 };
 
-export default TodoNote;
-function note(value: never, index: number, array: never[]): value is never {
-  throw new Error("Function not implemented.");
-}
+export default ScheNote;

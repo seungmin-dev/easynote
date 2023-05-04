@@ -7,17 +7,11 @@ import "moment/locale/ko";
 import { useRouter } from "next/router";
 import { cls } from "../libs/util";
 
-interface Easynote {
-  id: number;
-  noteTitle: string;
-  content: string;
-  createdAt: {};
-}
-
 const Home: NextPage = () => {
   const router = useRouter();
   const [easynotes, setEasynotes] = useState([]);
   const [search, setSearch] = useState(false);
+  const [deleteAll, setDeleteAll] = useState(false);
   const searchText = useRef<HTMLInputElement | null>(null);
 
   const onClickSearch = (e: any) => {
@@ -32,25 +26,27 @@ const Home: NextPage = () => {
       localStorage.getItem("easynote")!.length > 0
     ) {
       if (confirm("정말로 노트를 전부 삭제하시겠어요?🥹")) {
-        localStorage.removeItem("easynote");
-        router.reload();
+        let temp = JSON.parse(localStorage.getItem("easynote")!);
+        temp.splice(0, temp.length);
+        localStorage.setItem("easynote", JSON.stringify(temp));
+        setDeleteAll(true);
       } else return false;
     }
   };
 
   useEffect(() => {
-    if (localStorage.getItem("easynote"))
+    if (localStorage.getItem("easynote") || deleteAll)
       setEasynotes(
         JSON.parse(localStorage.getItem("easynote")!)
           .reverse()
           .filter(function (note: { noteTitle: string }) {
-            console.log(searchText.current?.value);
             if (searchText.current?.value === "") return true;
-            else return note.noteTitle === searchText.current?.value;
+            else return note.noteTitle.includes(searchText.current?.value);
           })
       );
     setSearch(false);
-  }, [search]);
+    setDeleteAll(false);
+  }, [search, deleteAll]);
 
   return (
     <Layout title="이지노트">
@@ -61,7 +57,7 @@ const Home: NextPage = () => {
           placeholder="제목으로 검색"
           ref={searchText}
         />
-        <div className="">
+        <div>
           <button
             onClick={(e) => onClickSearch(e)}
             className={cls(
