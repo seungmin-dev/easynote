@@ -231,7 +231,7 @@ const Schedule: NextPage = () => {
           </button>
         </div>
       </div>
-      <div>
+      <div className="h-96 overflow-y-scroll">
         {schenotes.map((note: any) => (
           <Link key={note?.id} href={`/schedule/${note?.id}`}>
             <div
@@ -267,7 +267,7 @@ const Schedule: NextPage = () => {
                 <h2 className="text-gray-400 text-xs">{note?.date}</h2>
                 <div className="flex justify-between mb-1">
                   <h2 className="font-large text-xl">{note?.noteTitle}</h2>
-                  <span className="text-gray-600 text-xs">
+                  <span className="text-gray-600 dark:text-white text-xs">
                     {moment(note?.createdAt).fromNow()}
                   </span>
                 </div>

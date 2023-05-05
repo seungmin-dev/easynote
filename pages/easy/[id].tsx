@@ -93,7 +93,7 @@ const EasyNote: NextPage = () => {
   };
 
   return (
-    <Layout title="날짜노트">
+    <Layout title="이지노트">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full h-12 flex align-middle justify-between mb-4">
           <h1 className="w-32 text-2xl font-bold mb-3 item pt-2">이지노트</h1>

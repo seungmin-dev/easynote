@@ -88,7 +88,7 @@ const Home: NextPage = () => {
           </button>
         </div>
       </div>
-      <div>
+      <div className="h-96 overflow-y-scroll">
         {easynotes.map((note: EasyNoteData) => (
           <Link href={`/easy/${note.id}`} key={note.id}>
             <div className="w-full p-5 bg-gray-100 dark:bg-zinc-600 rounded-xl my-3">
