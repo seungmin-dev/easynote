@@ -231,7 +231,7 @@ const Schedule: NextPage = () => {
           </button>
         </div>
       </div>
-      <div className="h-96 overflow-y-scroll">
+      <div className="h-[24rem] overflow-y-scroll">
         {schenotes.map((note: any) => (
           <Link key={note?.id} href={`/schedule/${note?.id}`}>
             <div

@@ -103,7 +103,7 @@ export default function Layout({ title, children }: LayoutProps) {
           )}
         </div>
         {/* 하단 하얀부분 */}
-        <div className="bg-white dark:bg-zinc-700 p-6 w-full rounded-b-2xl">
+        <div className="w-full h-[35rem] bg-white dark:bg-zinc-700 p-6 rounded-b-2xl">
           {children}
         </div>
       </div>
