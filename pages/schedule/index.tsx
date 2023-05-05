@@ -7,6 +7,13 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 
+interface ScheNote {
+  id: number;
+  noteTitle: string;
+  content: string;
+  date: string;
+  createdAt: string;
+}
 const Schedule: NextPage = () => {
   const router = useRouter();
   const [method, setMethod] = useState("date");
@@ -53,69 +60,78 @@ const Schedule: NextPage = () => {
 
   useEffect(() => {
     if (localStorage.getItem("schenote") || deleteAll) {
-      setSchenotes(
-        JSON.parse(localStorage.getItem("schenote")!)
-          .reverse()
-          .filter(function (note: {
-            noteTitle: string;
-            date: string;
-            createdAt: string;
-          }) {
-            // if (searchToDate.current?.value === "")
-            //   searchToDate.current!.value = moment().format("YYYY-MM-DD");
-            if (searchText.current?.value === "") {
-              //초기 무조건 검색 || 날짜 초기화 검색어 없이
-              if (
-                method === "date" &&
-                searchFromDate.current?.value === "" &&
-                searchToDate.current?.value === ""
-              ) {
-                return true;
-              }
-              // 날짜만
-              if (method === "date" && searchFromDate) {
-                return moment(note.date).isBetween(
-                  moment(searchFromDate.current?.value),
-                  moment(searchToDate.current?.value),
+      let temp = JSON.parse(localStorage.getItem("schenote")!)
+        .reverse()
+        .filter(function (note: {
+          noteTitle: string;
+          date: string;
+          createdAt: string;
+        }) {
+          // if (searchToDate.current?.value === "")
+          //   searchToDate.current!.value = moment().format("YYYY-MM-DD");
+          if (searchText.current?.value === "") {
+            //초기 무조건 검색 || 날짜 초기화 검색어 없이
+            if (
+              method === "date" &&
+              searchFromDate.current?.value === "" &&
+              searchToDate.current?.value === ""
+            ) {
+              return true;
+            }
+            // 날짜만
+            if (method === "date" && searchFromDate) {
+              return moment(note.date).isBetween(
+                moment(searchFromDate.current?.value),
+                moment(searchToDate.current?.value),
+                null,
+                "[]"
+              );
+            }
+            //디데이만
+            if (method === "dday" && searchDday) {
+              return (
+                moment(note.date).isAfter(moment()) &&
+                Math.abs(moment().diff(moment(note.date), "days")) <=
+                  Number(searchDday.current?.value)
+              );
+            }
+            return true;
+          } else if (searchText.current?.value !== "") {
+            //날짜+검색어
+            if (method === "date") {
+              return (
+                note.noteTitle.includes(searchText.current!.value) &&
+                moment(note.date).isBetween(
+                  searchFromDate.current?.value,
+                  searchToDate.current?.value,
                   null,
                   "[]"
-                );
-              }
-              //디데이만
-              if (method === "dday" && searchDday) {
-                return (
-                  moment(note.date).isAfter(moment()) &&
-                  Math.abs(moment().diff(moment(note.date), "days")) <=
-                    Number(searchDday.current?.value)
-                );
-              }
-              return true;
-            } else if (searchText.current?.value !== "") {
-              //날짜+검색어
-              if (method === "date") {
-                return (
-                  note.noteTitle.includes(searchText.current!.value) &&
-                  moment(note.date).isBetween(
-                    searchFromDate.current?.value,
-                    searchToDate.current?.value,
-                    null,
-                    "[]"
-                  )
-                );
-              }
-              //디데이+검색어
-              if (method === "dday") {
-                return (
-                  note.noteTitle.includes(searchText.current!.value) &&
-                  moment(note.date).isAfter(moment()) &&
-                  Math.abs(moment().diff(moment(note.date), "days")) <=
-                    Number(searchDday.current?.value)
-                );
-              }
-              return note.noteTitle.includes(searchText.current!.value);
+                )
+              );
             }
-          })
-      );
+            //디데이+검색어
+            if (method === "dday") {
+              return (
+                note.noteTitle.includes(searchText.current!.value) &&
+                moment(note.date).isAfter(moment()) &&
+                Math.abs(moment().diff(moment(note.date), "days")) <=
+                  Number(searchDday.current?.value)
+              );
+            }
+            return note.noteTitle.includes(searchText.current!.value);
+          }
+        });
+
+      // d-day가 3일 안인 노트는 상단으로 위치
+      let closeTemp: ScheNote[] = [];
+
+      closeTemp = temp.filter(function (item: ScheNote) {
+        return Math.abs(moment().diff(item.date, "days")) <= 3;
+      });
+      temp = temp.filter(function (item: ScheNote) {
+        return Math.abs(moment().diff(item.date, "days")) > 3;
+      });
+      setSchenotes(closeTemp.concat(temp));
     }
     setSearch(false);
     setDeleteAll(false);
@@ -212,11 +228,22 @@ const Schedule: NextPage = () => {
       <div>
         {schenotes.map((note: any) => (
           <Link key={note?.id} href={`/schedule/${note?.id}`}>
-            <div className="w-full p-5 bg-gray-100 rounded-xl my-3 flex">
+            <div
+              className={cls(
+                "w-full p-5 rounded-xl my-3 flex",
+                Math.abs(moment().diff(moment(note?.date), "days")) <= 3
+                  ? "bg-red-100"
+                  : "bg-gray-100"
+              )}
+            >
               <div className="w-20 mr-2">
                 <h2
                   className={cls(
                     "font-bold text-2xl text-center border-r-[1px] border-gray-300 mr-2 p-2 pl-0 ",
+
+                    Math.abs(moment().diff(moment(note?.date), "days")) <= 3
+                      ? "text-red-600 "
+                      : "",
                     moment().diff(moment(note?.date), "days") === 0
                       ? "leading-1"
                       : "leading-[4rem]"
