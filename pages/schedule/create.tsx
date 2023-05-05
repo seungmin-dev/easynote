@@ -61,18 +61,18 @@ const ScheCreate: NextPage = () => {
             {...register("date", { required: true })}
             type="date"
             defaultValue={moment().format("YYYY-MM-DD")}
-            className="text-base bg-gray-100 rounded-lg text-center px-2 mr-2"
+            className="text-base bg-gray-100 dark:bg-zinc-800 rounded-lg text-center px-2 mr-2"
           />
           <div>
             <button
               onClick={(e) => onClickBack(e)}
-              className="w-24 h-10 mr-1 bg-blue-400 text-white rounded-xl"
+              className="w-24 h-10 mr-1 bg-blue-400 dark:bg-blue-500 text-white rounded-xl"
             >
               뒤로가기
             </button>
             <input
               type="submit"
-              className="w-16 h-10 bg-blue-600 text-white rounded-xl cursor-pointer"
+              className="w-16 h-10 bg-blue-600 dark:bg-blue-700 text-white rounded-xl cursor-pointer"
               value="저장"
             />
           </div>
@@ -81,7 +81,7 @@ const ScheCreate: NextPage = () => {
           {...register("noteTitle", { required: true })}
           name="noteTitle"
           type="text"
-          className="w-full mb-3 p-3 rounded-lg bg-gray-100 placeholder-gray-500"
+          className="w-full mb-3 p-3 rounded-lg bg-gray-100 dark:bg-zinc-800 placeholder-gray-500"
           placeholder="제목을 입력하세요"
           ref={(e) => {
             titleRef(e);
@@ -91,7 +91,7 @@ const ScheCreate: NextPage = () => {
         <textarea
           {...register("content", { required: true })}
           name="content"
-          className="w-full p-3 rounded-lg bg-gray-100 placeholder-gray-500"
+          className="w-full p-3 rounded-lg bg-gray-100 dark:bg-zinc-800 placeholder-gray-500"
           placeholder="날짜노트를 작성하세요"
           ref={(e) => {
             contentRef(e);

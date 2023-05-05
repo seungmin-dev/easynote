@@ -100,14 +100,14 @@ const EasyNote: NextPage = () => {
           <div>
             <button
               onClick={(e) => onClickBack(e)}
-              className="w-24 h-10 mr-1 bg-blue-400 text-white rounded-xl"
+              className="w-24 h-10 mr-1 bg-blue-400 dark:bg-blue-500 text-white rounded-xl"
             >
               뒤로가기
             </button>
             <input
               type="submit"
               // onClick={onClickSave}
-              className="w-16 h-10 bg-blue-600 text-white rounded-xl cursor-pointer"
+              className="w-16 h-10 bg-blue-600 dark:bg-blue-700 text-white rounded-xl cursor-pointer"
               value="저장"
             />
           </div>
@@ -118,7 +118,7 @@ const EasyNote: NextPage = () => {
             required: true,
           })}
           type="text"
-          className="w-full mb-3 p-3 rounded-lg bg-gray-100 placeholder-gray-500"
+          className="w-full mb-3 p-3 rounded-lg bg-gray-100 dark:bg-zinc-800 placeholder-gray-500"
           placeholder="제목을 입력하세요"
           ref={(e) => {
             titleRef(e);
@@ -130,7 +130,7 @@ const EasyNote: NextPage = () => {
             required: true,
           })}
           name="content"
-          className="w-full p-3 rounded-lg bg-gray-100 placeholder-gray-500"
+          className="w-full p-3 rounded-lg bg-gray-100 dark:bg-zinc-800 placeholder-gray-500"
           placeholder="이지노트를 작성하세요"
           ref={(e) => {
             contentRef(e);
@@ -140,7 +140,7 @@ const EasyNote: NextPage = () => {
         <div className="flex">
           <button
             onClick={(e) => onCilckDelete(e)}
-            className="w-24 h-10 mr-1 bg-red-500 text-white rounded-xl"
+            className="w-24 h-10 mr-1 bg-red-500 dark:bg-red-600 text-white rounded-xl"
           >
             삭제
           </button>

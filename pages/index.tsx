@@ -59,7 +59,7 @@ const Home: NextPage = () => {
       <div className="mb-6 flex justify-between">
         <input
           type="text"
-          className="flex-grow mr-2 rounded-lg bg-gray-100 p-2 pl-4 focus-visible:border-black"
+          className="flex-grow mr-2 rounded-lg bg-gray-100 dark:bg-zinc-800 p-2 pl-4 focus-visible:border-black"
           placeholder="제목으로 검색"
           ref={searchText}
         />
@@ -69,8 +69,8 @@ const Home: NextPage = () => {
             className={cls(
               "w-24 py-2 mr-2  text-white rounded-lg",
               easynotes.length > 0
-                ? "bg-blue-600"
-                : "bg-blue-300 cursor-not-allowed"
+                ? "bg-blue-600 dark:bg-blue-700"
+                : "bg-blue-300 dark:bg-blue-400 cursor-not-allowed"
             )}
           >
             검색
@@ -80,8 +80,8 @@ const Home: NextPage = () => {
             className={cls(
               "w-24 py-2  text-white rounded-lg",
               easynotes.length > 0
-                ? "bg-red-600"
-                : "bg-red-300 cursor-not-allowed"
+                ? "bg-red-600 dark:bg-red-700"
+                : "bg-red-300 dark:bg-red-400 cursor-not-allowed"
             )}
           >
             전체삭제
@@ -90,15 +90,17 @@ const Home: NextPage = () => {
       </div>
       <div>
         {easynotes.map((note: EasyNoteData) => (
-          <div key={note.id} className="w-full p-5 bg-gray-100 rounded-xl my-3">
-            <div className="flex justify-between mb-1">
-              <h2 className="font-large text-xl">{note?.noteTitle}</h2>
-              <span className="text-gray-600 text-xs">
-                {moment(note?.createdAt).fromNow()}
-              </span>
+          <Link href={`/easy/${note.id}`} key={note.id}>
+            <div className="w-full p-5 bg-gray-100 dark:bg-zinc-600 rounded-xl my-3">
+              <div className="flex justify-between mb-1">
+                <h2 className="font-large text-xl">{note?.noteTitle}</h2>
+                <span className="text-gray-600 text-xs">
+                  {moment(note?.createdAt).fromNow()}
+                </span>
+              </div>
+              <span className="text-gray-400 text-sm">{note?.content}</span>
             </div>
-            <span className="text-gray-400 text-sm">{note?.content}</span>
-          </div>
+          </Link>
         ))}
       </div>
     </Layout>

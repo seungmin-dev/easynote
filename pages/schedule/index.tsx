@@ -146,7 +146,9 @@ const Schedule: NextPage = () => {
             onClick={onClickDate}
             className={cls(
               "w-24 p-2 rounded-lg rounded-r-none text-center cursor-pointer",
-              method === "date" ? "bg-gray-100" : "bg-gray-200"
+              method === "date"
+                ? "bg-gray-100 dark:bg-zinc-800"
+                : "bg-gray-200 dark:bg-zinc-600"
             )}
             value="날짜 우선"
           />
@@ -155,7 +157,9 @@ const Schedule: NextPage = () => {
             onClick={onClickDday}
             className={cls(
               "w-28 rounded-lg rounded-l-none p-2 px-4 text-center mr-2 cursor-pointer",
-              method === "dday" ? "bg-gray-100" : "bg-gray-200"
+              method === "dday"
+                ? "bg-gray-100 dark:bg-zinc-800"
+                : "bg-gray-200 dark:bg-zinc-600"
             )}
             value="디데이 우선"
           />
@@ -166,19 +170,19 @@ const Schedule: NextPage = () => {
               type="date"
               ref={searchFromDate}
               // defaultValue={moment().format("YYYY-MM-DD")}
-              className="text-base leading-7  bg-gray-100 rounded-lg text-center p-1 pr-2"
+              className="text-base leading-7  bg-gray-100 dark:bg-zinc-800 rounded-lg text-center p-1 pr-2"
             />{" "}
             <span className="leading-9 px-1 text-center">-</span>
             <input
               type="date"
               ref={searchToDate}
               // defaultValue={moment().format("YYYY-MM-DD")}
-              className="text-base leading-7 mr-2 bg-gray-100 rounded-lg text-center p-1 pr-2"
+              className="text-base leading-7 mr-2 bg-gray-100 dark:bg-zinc-800 rounded-lg text-center p-1 pr-2"
             />
             <input
               type="button"
               onClick={onClickInit}
-              className="w-28 rounded-lg bg-gray-100 text-center"
+              className="w-28 rounded-lg bg-gray-100 dark:bg-zinc-800 text-center"
               value="날짜 초기화"
             />
           </>
@@ -191,7 +195,7 @@ const Schedule: NextPage = () => {
             <input
               type="text"
               ref={searchDday}
-              className="w-20 rounded-lg bg-gray-100 p-2 pl-4 focus-visible:border-black"
+              className="w-20 rounded-lg bg-gray-100 dark:bg-zinc-800 p-2 pl-4 focus-visible:border-black"
             />
           </>
         ) : (
@@ -201,14 +205,16 @@ const Schedule: NextPage = () => {
       <div className="mb-6 flex justify-between">
         <input
           type="text"
-          className="flex-grow mr-2 rounded-lg bg-gray-100 p-2 pl-4 focus-visible:border-black"
+          className="flex-grow mr-2 rounded-lg bg-gray-100 dark:bg-zinc-800 p-2 pl-4 focus-visible:border-black"
           placeholder="제목으로 검색"
           ref={searchText}
         />
         <div>
           <button
             onClick={(e) => onClickSearch(e)}
-            className={cls("w-24 py-2 mr-2  text-white rounded-lg bg-blue-600")}
+            className={cls(
+              "w-24 py-2 mr-2  text-white rounded-lg bg-blue-600 dark:bg-blue-700"
+            )}
           >
             검색
           </button>
@@ -217,8 +223,8 @@ const Schedule: NextPage = () => {
             className={cls(
               "w-24 py-2  text-white rounded-lg",
               schenotes.length > 0
-                ? "bg-red-600"
-                : "bg-red-300 cursor-not-allowed"
+                ? "bg-red-600 dark:bg-red-700"
+                : "bg-red-300 dark:bg-red-400 cursor-not-allowed"
             )}
           >
             전체삭제
@@ -232,8 +238,8 @@ const Schedule: NextPage = () => {
               className={cls(
                 "w-full p-5 rounded-xl my-3 flex",
                 Math.abs(moment().diff(moment(note?.date), "days")) <= 3
-                  ? "bg-red-100"
-                  : "bg-gray-100"
+                  ? "bg-red-100 dark:bg-red-300"
+                  : "bg-gray-100 dark:bg-zinc-600"
               )}
             >
               <div className="w-20 mr-2">
