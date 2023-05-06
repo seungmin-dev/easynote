@@ -3,7 +3,6 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  basePath: "/easynote",
 };
 
 module.exports = nextConfig;
