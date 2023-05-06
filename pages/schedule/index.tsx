@@ -17,7 +17,7 @@ interface ScheNote {
 const Schedule: NextPage = () => {
   const router = useRouter();
   const [method, setMethod] = useState("date");
-  const [schenotes, setSchenotes] = useState([]);
+  const [schenotes, setSchenotes] = useState<ScheNote[]>([]);
   const [search, setSearch] = useState(false);
   const [deleteAll, setDeleteAll] = useState(false);
   const searchText = useRef<HTMLInputElement | null>(null);
@@ -60,7 +60,7 @@ const Schedule: NextPage = () => {
 
   useEffect(() => {
     if (localStorage.getItem("schenote") || deleteAll) {
-      let temp = JSON.parse(localStorage.getItem("schenote")!)
+      let temp: ScheNote[] = JSON.parse(localStorage.getItem("schenote")!)
         .reverse()
         .filter(function (note: {
           noteTitle: string;
@@ -123,19 +123,19 @@ const Schedule: NextPage = () => {
         });
 
       // d-day가 3일 안인 노트는 상단으로 위치
-      let closeTemp: ScheNote[] = [];
-
-      closeTemp = temp.filter(function (item: ScheNote) {
+      let under3 = temp.filter(function (item: ScheNote) {
         return Math.abs(moment().diff(item.date, "days")) <= 3;
       });
-      temp = temp.filter(function (item: ScheNote) {
+
+      let over3 = temp.filter(function (item: ScheNote) {
         return Math.abs(moment().diff(item.date, "days")) > 3;
       });
-      setSchenotes(closeTemp.concat(temp));
+
+      setSchenotes([...under3, ...over3]);
     }
     setSearch(false);
     setDeleteAll(false);
-  }, [deleteAll, search]);
+  }, [deleteAll, method, search]);
 
   return (
     <Layout title="날짜노트">

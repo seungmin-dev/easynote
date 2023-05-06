@@ -47,7 +47,7 @@ const Home: NextPage = () => {
           .reverse()
           .filter(function (note: { noteTitle: string }) {
             if (searchText.current?.value === "") return true;
-            else return note.noteTitle.includes(searchText.current?.value);
+            else return note.noteTitle.includes(searchText.current?.value + "");
           })
       );
     setSearch(false);
