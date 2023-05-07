@@ -67,58 +67,100 @@ const Schedule: NextPage = () => {
           date: string;
           createdAt: string;
         }) {
-          // if (searchToDate.current?.value === "")
-          //   searchToDate.current!.value = moment().format("YYYY-MM-DD");
+          //제목텍스트 O
+          //method === 'date'
+          //날짜O
+          //날짜X
+          //method == 'dday'
+          //디데이O
+          //디데이X
+          //제목텍스트 X
+          //method === 'date'
+          //날짜O
+          //날짜X
+          //method == 'dday'
+          //디데이O
+          //디데이X
           if (searchText.current?.value === "") {
-            //초기 무조건 검색 || 날짜 초기화 검색어 없이
-            if (
-              method === "date" &&
-              searchFromDate.current?.value === "" &&
-              searchToDate.current?.value === ""
-            ) {
-              return true;
-            }
-            // 날짜만
-            if (method === "date" && searchFromDate) {
-              return moment(note.date).isBetween(
-                moment(searchFromDate.current?.value),
-                moment(searchToDate.current?.value),
-                null,
-                "[]"
-              );
-            }
-            //디데이만
-            if (method === "dday" && searchDday) {
-              return (
-                moment(note.date).isAfter(moment()) &&
-                Math.abs(moment().diff(moment(note.date), "days")) <=
-                  Number(searchDday.current?.value)
-              );
-            }
-            return true;
-          } else if (searchText.current?.value !== "") {
-            //날짜+검색어
+            //제목 X
             if (method === "date") {
-              return (
-                note.noteTitle.includes(searchText.current!.value) &&
-                moment(note.date).isBetween(
-                  searchFromDate.current?.value,
-                  searchToDate.current?.value,
+              if (
+                // 제목 X && 날짜 O
+                searchFromDate.current?.value !== "" ||
+                searchToDate.current?.value !== ""
+              ) {
+                return moment(note.date).isBetween(
+                  moment(searchFromDate.current?.value),
+                  moment(searchToDate.current?.value),
                   null,
                   "[]"
-                )
-              );
+                );
+              } else if (
+                //제목 X && 날짜 X
+                searchFromDate.current?.value === "" &&
+                searchToDate.current?.value === ""
+              ) {
+                return true;
+              }
+            } else if (method === "dday") {
+              if (searchDday.current?.value !== "") {
+                // 제목 X && 디데이 O
+                return (
+                  moment(note.date).isAfter(moment()) &&
+                  Math.abs(moment().diff(moment(note.date), "days")) <=
+                    Number(searchDday.current?.value)
+                );
+              } else if (searchDday.current?.value === "") {
+                // 제목 X && 디데이 X
+                return true;
+              }
             }
-            //디데이+검색어
-            if (method === "dday") {
-              return (
-                note.noteTitle.includes(searchText.current!.value) &&
-                moment(note.date).isAfter(moment()) &&
-                Math.abs(moment().diff(moment(note.date), "days")) <=
-                  Number(searchDday.current?.value)
-              );
+          } else if (searchText.current?.value !== "") {
+            //제목O
+            if (method === "date") {
+              if (
+                //제목 O && 날짜 O
+                searchFromDate.current?.value !== "" ||
+                searchToDate.current?.value !== ""
+              ) {
+                return (
+                  note.noteTitle.includes(searchText.current!.value) &&
+                  moment(note.date).isBetween(
+                    moment(searchFromDate.current?.value),
+                    moment(searchToDate.current?.value),
+                    null,
+                    "[]"
+                  )
+                );
+              } else if (
+                // 제목 O && 날짜 X
+                searchFromDate.current?.value === "" &&
+                searchToDate.current?.value === ""
+              ) {
+                return note.noteTitle.includes(searchText.current!.value);
+              }
+            } else if (method === "dday") {
+              if (searchDday.current?.value === "") {
+                //제목 O && 디데이 X
+                return note.noteTitle.includes(searchText.current!.value);
+              } else if (searchDday.current?.value !== "") {
+                console.log(searchDday.current?.value);
+                //제목 O && 디데이 O
+                return (
+                  note.noteTitle.includes(searchText.current!.value) &&
+                  moment(note.date).isAfter(moment()) &&
+                  Math.abs(
+                    moment
+                      .duration(
+                        moment(note?.date, "YYYY-MM-DD").diff(
+                          moment().startOf("day")
+                        )
+                      )
+                      .asDays()
+                  ) <= Number(searchDday.current?.value)
+                );
+              }
             }
-            return note.noteTitle.includes(searchText.current!.value);
           }
         });
 
