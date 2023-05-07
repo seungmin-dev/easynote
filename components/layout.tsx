@@ -4,7 +4,7 @@ import darkBgImage from "../components/dark_background.jpg";
 import { cls } from "../libs/util";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 
@@ -14,11 +14,13 @@ interface LayoutProps {
 }
 
 export default function Layout({ title, children }: LayoutProps) {
+  useEffect(() => {
+    console.log(theme);
+  });
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const themeBtn = useRef<HTMLInputElement | null>(null);
   const newNote = () => {
-    console.log(router.pathname);
     if (router.pathname.includes("schedule")) router.push("/schedule/create");
     else router.push("/easy/create");
   };
@@ -108,7 +110,7 @@ export default function Layout({ title, children }: LayoutProps) {
         </div>
       </div>
       <Image
-        src={theme === "light" ? lightBgImage : darkBgImage}
+        src={theme && theme === "dark" ? darkBgImage : lightBgImage}
         alt="배경이미지"
         fill
         style={{ objectFit: "cover", objectPosition: "center", zIndex: -100 }}

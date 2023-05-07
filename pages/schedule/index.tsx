@@ -256,11 +256,42 @@ const Schedule: NextPage = () => {
                   )}
                 >
                   D{""}
-                  {moment().diff(moment(note?.date), "days") == 0
+                  {/* d-day */}
+                  {moment
+                    .duration(
+                      moment(note?.date, "YYYY-MM-DD").diff(
+                        moment().startOf("day")
+                      )
+                    )
+                    .asDays() == 0
                     ? `-day`
-                    : moment().diff(moment(note?.date), "days") > 0
-                    ? `+` + moment().diff(moment(note?.date), "days")
-                    : moment().diff(moment(note?.date), "days")}
+                    : moment
+                        .duration(
+                          moment(note?.date, "YYYY-MM-DD").diff(
+                            moment().startOf("day")
+                          )
+                        )
+                        .asDays() > 0
+                    ? `-` +
+                      Number(
+                        moment
+                          .duration(
+                            moment(note?.date, "YYYY-MM-DD").diff(
+                              moment().startOf("day")
+                            )
+                          )
+                          .asDays()
+                      )
+                    : `+` +
+                      Math.abs(
+                        moment
+                          .duration(
+                            moment(note?.date, "YYYY-MM-DD").diff(
+                              moment().startOf("day")
+                            )
+                          )
+                          .asDays()
+                      )}
                 </h2>
               </div>
               <div className="flex-grow">

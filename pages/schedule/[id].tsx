@@ -140,7 +140,7 @@ const ScheNote: NextPage = () => {
             required: true,
           })}
           name="content"
-          className="w-full p-3 rounded-lg bg-gray-100 dark:bg-zinc-800 placeholder-gray-500"
+          className="w-full h-[18rem] mb-3 p-3 rounded-lg bg-gray-100 dark:bg-zinc-800 placeholder-gray-500"
           placeholder="날짜노트를 작성하세요"
           ref={(e) => {
             contentRef(e);
