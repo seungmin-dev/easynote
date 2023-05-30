@@ -1,10 +1,10 @@
 import Image from "next/image";
-import lightBgImage from "../components/light_background.jpg";
-import darkBgImage from "../components/dark_background.jpg";
+import lightBgImage from "../public/light_background.jpg";
+import darkBgImage from "../public/dark_background.jpg";
 import { cls } from "../libs/util";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 
@@ -14,9 +14,6 @@ interface LayoutProps {
 }
 
 export default function Layout({ title, children }: LayoutProps) {
-  useEffect(() => {
-    console.log(theme);
-  });
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const themeBtn = useRef<HTMLInputElement | null>(null);

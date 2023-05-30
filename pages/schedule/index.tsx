@@ -25,14 +25,6 @@ const Schedule: NextPage = () => {
   const searchToDate = useRef<HTMLInputElement | null>(null);
   const searchDday = useRef<HTMLInputElement | null>(null);
 
-  const onClickDate = () => {
-    setMethod("date");
-  };
-
-  const onClickDday = () => {
-    setMethod("dday");
-  };
-
   const onClickInit = () => {
     searchFromDate.current!.value = "";
     searchToDate.current!.value = "";
@@ -67,20 +59,6 @@ const Schedule: NextPage = () => {
           date: string;
           createdAt: string;
         }) {
-          //제목텍스트 O
-          //method === 'date'
-          //날짜O
-          //날짜X
-          //method == 'dday'
-          //디데이O
-          //디데이X
-          //제목텍스트 X
-          //method === 'date'
-          //날짜O
-          //날짜X
-          //method == 'dday'
-          //디데이O
-          //디데이X
           if (searchText.current?.value === "") {
             //제목 X
             if (method === "date") {
@@ -144,7 +122,7 @@ const Schedule: NextPage = () => {
                 //제목 O && 디데이 X
                 return note.noteTitle.includes(searchText.current!.value);
               } else if (searchDday.current?.value !== "") {
-                console.log(searchDday.current?.value);
+                // console.log(searchDday.current?.value);
                 //제목 O && 디데이 O
                 return (
                   note.noteTitle.includes(searchText.current!.value) &&
@@ -185,7 +163,7 @@ const Schedule: NextPage = () => {
         <div className="flex justify-content">
           <input
             type="button"
-            onClick={onClickDate}
+            onClick={() => setMethod("date")}
             className={cls(
               "w-24 p-2 rounded-lg rounded-r-none text-center cursor-pointer",
               method === "date"
@@ -196,7 +174,7 @@ const Schedule: NextPage = () => {
           />
           <input
             type="button"
-            onClick={onClickDday}
+            onClick={() => setMethod("dday")}
             className={cls(
               "w-28 rounded-lg rounded-l-none p-2 px-4 text-center mr-2 cursor-pointer",
               method === "dday"
